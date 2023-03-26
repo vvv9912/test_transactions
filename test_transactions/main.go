@@ -32,12 +32,14 @@ func main() {
 	//consumer
 	c := Consumer.NewConsumer()
 	c.ConsumerStart()
-	defer c.P.Close()
+	defer c.C.Close()
 	//producer
 	prod := Producer.NewProducer()
+
 	defer prod.P.Close()
 	//http
-	err = httpserver.NewServer(httpUrl).ServerStart(httpserver.Handler{P: prod.P})
+	//err = httpserver.NewServer(httpUrl).ServerStart(httpserver.Handler{P: prod.P})
+	httpserver.NewServer(httpUrl).ServerStart(httpserver.Handler{P: prod.P})
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{

@@ -32,6 +32,7 @@ func NewServer(addr string) *Server {
 	return &Server{Server: http.Server{Addr: addr}}
 }
 func (s Server) ServerStart(h Handler) error {
+
 	http.HandleFunc("/add", h.addHttpAnswer)
 	http.HandleFunc("/sub", h.subHttpAnswer)
 	err := s.Server.ListenAndServe()
@@ -56,19 +57,9 @@ func (h Handler) addHttpAnswer(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, fmt.Sprintf("error"))
 	} else {
 
-		_, err := io.WriteString(w, fmt.Sprintf("id = %v, money = %v", id, money))
+		//_, err := io.WriteString(w, fmt.Sprintf("id = %v, money = %v\n", id, money))
 
-		if err != nil {
-			logrus.WithFields(
-				logrus.Fields{
-					"package": "server",
-					"func":    "addHttpAnswer",
-					"method":  "WriteString",
-				}).Warningln(err)
-			return
-		}
-
-		//передам json
+		//передча
 		var message Message
 		id32, err := strconv.Atoi(id)
 		if err != nil {
@@ -111,6 +102,16 @@ func (h Handler) addHttpAnswer(w http.ResponseWriter, r *http.Request) {
 			Key:            []byte(id),
 		}, nil)
 		h.P.Flush(15 * 1000)
+		_, err = io.WriteString(w, fmt.Sprintf("%d", http.StatusOK))
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{
+					"package": "server",
+					"func":    "addHttpAnswer",
+					"method":  "WriteString",
+				}).Warningln(err)
+		}
+
 	}
 
 }
@@ -130,19 +131,7 @@ func (h Handler) subHttpAnswer(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 
-		_, err := io.WriteString(w, fmt.Sprintf("id = %v, money = %v", id, money))
-
-		if err != nil {
-			logrus.WithFields(
-				logrus.Fields{
-					"package": "server",
-					"func":    "subHttpAnswer",
-					"method":  "WriteString",
-				}).Warningln(err)
-			return
-		}
-
-		//передам json
+		//_, err := io.WriteString(w, fmt.Sprintf("id = %v, money = %v", id, money))
 		var message Message
 		id32, err := strconv.Atoi(id)
 		if err != nil {
@@ -184,5 +173,15 @@ func (h Handler) subHttpAnswer(w http.ResponseWriter, r *http.Request) {
 			Key:            []byte(id),
 		}, nil)
 		h.P.Flush(15 * 1000)
+		_, err = io.WriteString(w, fmt.Sprintf("%d", http.StatusOK))
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{
+					"package": "server",
+					"func":    "subHttpAnswer",
+					"method":  "WriteString",
+				}).Warningln(err)
+			return
+		}
 	}
 }

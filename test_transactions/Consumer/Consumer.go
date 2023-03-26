@@ -11,7 +11,7 @@ import (
 )
 
 type Consumer struct {
-	P *kafka.Consumer
+	C *kafka.Consumer
 }
 
 var (
@@ -26,7 +26,7 @@ const (
 )
 
 func NewConsumer() Consumer {
-	//&
+
 	kfk, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": bootstrapservers,
 		"group.id":          groupid,
@@ -40,16 +40,18 @@ func NewConsumer() Consumer {
 				"method":  "NewConsumer",
 			}).Fatalln(err)
 	}
-	return Consumer{P: kfk}
+	return Consumer{C: kfk}
 }
 
 func (c Consumer) ConsumerStart() error {
-	c.P.SubscribeTopics([]string{"Add", "Sub"}, nil)
+	c.C.SubscribeTopics([]string{"Add", "Sub"}, nil)
 	// A signal handler or similar could be used to set this to false to break the loop.
 	run := true
+
 	go func() {
 		for run {
-			msg, err := c.P.ReadMessage(time.Millisecond)
+			msg, err := c.C.ReadMessage(time.Millisecond)
+
 			if err == nil {
 				err = parser(msg)
 				if err != nil {
