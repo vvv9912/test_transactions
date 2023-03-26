@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
-	"testConsumer/proto"
+	"testtransactions/proto"
 )
 
 type Message struct {

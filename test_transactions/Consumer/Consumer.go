@@ -5,8 +5,8 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	proto2 "github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
-	"testConsumer/database"
-	"testConsumer/proto"
+	"testtransactions/database"
+	"testtransactions/proto"
 	"time"
 )
 
@@ -106,8 +106,8 @@ func parser(msg *kafka.Message) error {
 		err = db.Read(msg.TopicPartition.Partition, &dbedit)
 		if err != nil {
 			if err.Error() == "sql: no rows in result set" {
+				err = nil
 				err = db.Add(database.T_DB{IdUser: msg.TopicPartition.Partition, Balance: message.Money})
-
 				if err != nil {
 					logrus.WithFields(
 						logrus.Fields{
@@ -116,7 +116,7 @@ func parser(msg *kafka.Message) error {
 							"method":  "db.Add",
 						}).Fatalln(err)
 				}
-				fmt.Println("ID добавлен")
+				logrus.Infof("ID %d добавлен в БД", message.Id)
 			} else {
 				logrus.WithFields(
 					logrus.Fields{
@@ -186,7 +186,7 @@ func parser(msg *kafka.Message) error {
 							"method":  "db.Edit",
 						}).Fatalln(err)
 				}
-				logrus.Infof("Для ID %d баланс изменен", dbedit.Balance)
+				logrus.Infof("Для ID %d баланс изменен = %f", dbedit.IdUser, dbedit.Balance)
 			} else {
 				logrus.Infof("Транзакция невозможна, не хватает денет")
 			}

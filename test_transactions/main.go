@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/sirupsen/logrus"
-	"testConsumer/Consumer"
-	"testConsumer/Producer"
-	"testConsumer/database"
-	"testConsumer/httpserver"
-	"testConsumer/proto"
+	"testtransactions/Consumer"
+	"testtransactions/Producer"
+	"testtransactions/database"
+	"testtransactions/httpserver"
+	"testtransactions/proto"
 )
 
 type Message struct {

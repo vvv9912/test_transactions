@@ -1,4 +1,4 @@
-module testConsumer
+module testtransactions
 
 go 1.19
 
