@@ -7,12 +7,7 @@ import (
 	"os"
 	"testtransactions/database"
 	"testtransactions/httpserver"
-	"testtransactions/proto"
 )
-
-type Message struct {
-	proto.Message
-}
 
 func main() {
 	type cfg struct {
