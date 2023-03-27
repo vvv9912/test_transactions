@@ -13,11 +13,6 @@ import (
 type Message struct {
 	proto.Message
 }
-type ForCache struct {
-	Numtrans string
-	Ok       bool
-	Answer   string
-}
 
 func main() {
 	type cfg struct {
